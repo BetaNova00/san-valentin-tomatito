@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Una sorpresa para ti</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --color-sobre: #ff4d6d;
+            --color-carta: #ffffff;
+            --color-texto: #c9184a;
+        }
+
+        body {
+            background-color: #ffeef2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+        }
+
+        .envelope-wrapper {
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .envelope {
+            position: relative;
+            width: 300px;
+            height: 200px;
+            background: var(--color-sobre);
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+
+        /* Tapa del sobre */
+        .envelope::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            z-index: 2;
+            border-top: 110px solid #ff758f;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            transform-origin: top;
+            transition: transform 0.5s 0.3s;
+        }
+
+        /* Lados del sobre */
+        .envelope::after {
+            content: "";
+            position: absolute;
+            z-index: 2;
+            width: 0;
+            height: 0;
+            border-top: 100px solid transparent;
+            border-right: 150px solid #ff4d6d;
+            border-bottom: 100px solid #ff4d6d;
+            border-left: 150px solid #ff4d6d;
+            border-radius: 0 0 10px 10px;
+        }
+
+        .letter {
+            position: absolute;
+            bottom: 0;
+            left: 10px;
+            width: 280px;
+            height: 180px;
+            background: var(--color-carta);
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+            transition: transform 0.5s;
+            z-index: 1;
+            border-radius: 5px;
+        }
+
+        .letter h1 { font-size: 18px; color: var(--color-texto); }
+        .letter p { font-size: 14px; color: #555; }
+
+        /* Animación al abrir */
+        .envelope-wrapper.open .envelope::before {
+            transform: rotateX(180deg);
+            z-index: 0;
+        }
+
+        .envelope-wrapper.open .letter {
+            transform: translateY(-120px);
+            height: 250px;
+            z-index: 3;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .btn-container { display: none; margin-top: 15px; }
+        .open .btn-container { display: flex; justify-content: center; gap: 10px; }
+
+        .btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        #si { background: #ff4d6d; color: white; }
+        #no { background: #6c757d; color: white; position: absolute; }
+    </style>
+</head>
+<body>
+
+    <div class="envelope-wrapper" id="wrapper" onclick="abrirCarta()">
+        <div class="envelope"></div>
+        <div class="letter">
+            <h1>¿Quieres ser mi San Valentín?</h1>
+            <p>Desde que te conocí, mi mundo es mejor. 🍅</p>
+            <div class="btn-container" id="btns">
+                <button id="si" class="btn" onclick="celebrar(event)">¡SÍ!</button>
+                <button id="no" class="btn" onmouseover="huir(this)" onclick="clicNo(event)">No</button>
+            </div>
+            <h2 id="final" style="display:none; color: #ff4d6d;">¡TE AMO! ❤️</h2>
+        </div>
+    </div>
+
+    <script>
+        function abrirCarta() {
+            document.getElementById('wrapper').classList.add('open');
+        }
+
+        function huir(btn) {
+            const x = Math.random() * (window.innerWidth - btn.offsetWidth);
+            const y = Math.random() * (window.innerHeight - btn.offsetHeight);
+            btn.style.left = x + 'px';
+            btn.style.top = y + 'px';
+        }
+
+        function clicNo(e) {
+            e.stopPropagation();
+            alert("El no no es una opción tomatito jsjsj 🍅");
+        }
+
+        function celebrar(e) {
+            e.stopPropagation();
+            document.getElementById('btns').style.display = 'none';
+            document.getElementById('final').style.display = 'block';
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+        }
+    </script>
+</body>
+</html>
